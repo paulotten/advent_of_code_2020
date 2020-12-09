@@ -21,7 +21,7 @@ impl Instruction {
 fn main() {
     //let data = data::_get_sample_data();
     let data = data::get_data();
-    let instructions = data.lines().map(|line| Instruction::parse(line)).collect();
+    let instructions = data.lines().map(Instruction::parse).collect();
 
     _puzzle1(instructions);
 }
