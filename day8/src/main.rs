@@ -4,7 +4,7 @@ use std::collections::HashSet;
 
 struct Instruction {
     op: &'static str,
-    arg: i64,
+    arg: isize,
 }
 
 impl Instruction {
@@ -28,7 +28,7 @@ fn main() {
 
 fn _puzzle1(instructions: Vec<Instruction>) {
     let mut visited_lines: HashSet<usize> = HashSet::new();
-    let mut accumulator: i64 = 0;
+    let mut accumulator: isize = 0;
     let mut i: usize = 0;
 
     loop {
@@ -43,7 +43,7 @@ fn _puzzle1(instructions: Vec<Instruction>) {
                 accumulator += arg;
                 i += 1;
             }
-            ("jmp", arg @ _) => i = (i as i64 + arg) as usize,
+            ("jmp", arg @ _) => i = (i as isize + arg) as usize,
             (op @ _, _) => panic!("unknown opcode: {}", op),
         };
     }
