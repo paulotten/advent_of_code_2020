@@ -44,6 +44,7 @@ fn puzzle2(ids: Vec<&str>) {
         
         step *= id as i64;
     }
+
     println!("{}", timestamp);
 }
 
