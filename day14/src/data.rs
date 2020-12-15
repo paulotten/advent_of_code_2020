@@ -5,6 +5,13 @@ mem[7] = 101
 mem[8] = 0"
 }
 
+pub fn _sample_data2() -> &'static str {
+    "mask = 000000000000000000000000000000X1001X
+mem[42] = 100
+mask = 00000000000000000000000000000000X0XX
+mem[26] = 1"
+}
+
 pub fn get_data() -> &'static str {
     "mask = 10011X0100001X1110X0X001000X10X01101
 mem[24654] = 24859
