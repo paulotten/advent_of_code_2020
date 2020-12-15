@@ -11,38 +11,46 @@ fn main() {
     puzzle1(commands);
 }
 
+fn get_mask(s: &str) -> Vec<Option<u64>> {
+    let mut mask = vec![];
+
+    for c in s.chars().rev() {
+        mask.push(match c {
+            '0' => Some(0),
+            '1' => Some(1),
+            'X' => None,
+            _ => panic!("Unsupported mask character: {}", c),
+        })
+    }
+
+    mask
+}
+
+fn get_address(s: &str) -> u64 {
+    s.split("mem[")
+        .skip(1)
+        .next()
+        .unwrap()
+        .split(']')
+        .next()
+        .unwrap()
+        .parse()
+        .unwrap()
+}
+
 fn puzzle1(commands: Vec<Vec<&str>>) {
     let mut memory: HashMap<u64, u64> = HashMap::new();
-    let mut mask: Vec<Option<u64>> = vec!();
+    let mut mask: Vec<Option<u64>> = vec![];
 
     for command in commands {
         match command[0] {
             "mask" => {
-                mask = vec!();
-
-                for c in command[1].chars().rev() {
-                    mask.push(match c {
-                        '0' => Some(0),
-                        '1' => Some(1),
-                        'X' => None,
-                        _ => panic!("Unsupported mask character: {}", c),
-                    })
-                }
+                mask = get_mask(command[1]);
             }
-            x if x.starts_with("mem[") => {
-                let address: u64 = x
-                    .split("mem[")
-                    .skip(1)
-                    .next()
-                    .unwrap()
-                    .split(']')
-                    .next()
-                    .unwrap()
-                    .parse()
-                    .unwrap();
-
+            s if s.starts_with("mem[") => {
+                let address = get_address(s);
                 let mut value: u64 = command[1].parse().unwrap();
-                
+
                 // apply mask
                 let mut mult = 1;
 
