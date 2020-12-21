@@ -77,6 +77,8 @@ fn puzzle1(tiles: &Vec<Tile>) {
 fn get_count_matches(tile: &Tile, tiles: &Vec<Tile>) -> u8 {
     let mut count = 0;
 
+    println!("{}", tile.id);
+
     for test in tiles {
         // don't match self
         if tile.id == test.id {
@@ -84,6 +86,7 @@ fn get_count_matches(tile: &Tile, tiles: &Vec<Tile>) -> u8 {
         }
 
         if tile.matches(test) {
+            println!("matches {}", test.id);
             count += 1;
         }
     }
