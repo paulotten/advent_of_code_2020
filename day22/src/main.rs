@@ -46,12 +46,14 @@ fn part2(decks: &mut Vec<Vec<usize>>) {
     println!("{}", get_score(&winning_deck));
 }
 
-fn recurse(decks: &mut Vec<Vec<usize>>) -> Vec<Vec<usize>> {
+fn recurse(decks: &mut Vec<Vec<usize>>) -> &Vec<Vec<usize>> {
     let mut previous_decks = vec![];
 
     while decks[0].len() > 0 && decks[1].len() > 0 {
         if previous_decks.contains(decks) {
-            return vec![vec![1], vec![]];
+            decks[1] = vec![];
+
+            return decks;
         }
         previous_decks.push(decks.clone());
 
@@ -90,7 +92,7 @@ fn recurse(decks: &mut Vec<Vec<usize>>) -> Vec<Vec<usize>> {
         }
     }
 
-    decks.clone()
+    decks
 }
 
 fn get_score(deck: &Vec<usize>) -> usize {
