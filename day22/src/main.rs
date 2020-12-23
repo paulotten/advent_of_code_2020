@@ -9,17 +9,17 @@ fn main() {
         .map(|d| {
             d.lines()
                 .skip(1)
-                .map(|n| n.parse::<u32>().unwrap())
+                .map(|n| n.parse::<usize>().unwrap())
                 .collect()
         })
         .collect();
     
     assert!(decks.len() == 2);
 
-    part1(&mut decks);
+    part2(&mut decks);
 }
 
-fn part1(decks: &mut Vec<Vec<u32>>) {
+fn _part1(decks: &mut Vec<Vec<usize>>) {
     while decks[0].len() > 0 && decks[1].len() > 0 {
         let card0 = decks[0].remove(0);
         let card1 = decks[1].remove(0);
@@ -33,15 +33,74 @@ fn part1(decks: &mut Vec<Vec<u32>>) {
         }
     }
 
-    let winning_deck: Vec<_> = decks.iter().flatten().collect();
+    let winning_deck: Vec<_> = decks.iter().flatten().map(|x| *x).collect();
 
+    println!("{}", get_score(&winning_deck));
+}
+
+fn part2(decks: &mut Vec<Vec<usize>>) {
+    let decks = recurse(decks);
+
+    let winning_deck: Vec<_> = decks.iter().flatten().map(|x| *x).collect();
+
+    println!("{}", get_score(&winning_deck));
+}
+
+fn recurse(decks: &mut Vec<Vec<usize>>) -> Vec<Vec<usize>> {
+    let mut previous_decks = vec![];
+
+    while decks[0].len() > 0 && decks[1].len() > 0 {
+        if previous_decks.contains(decks) {
+            return vec![vec![1], vec![]];
+        }
+        previous_decks.push(decks.clone());
+
+        let card0 = decks[0].remove(0);
+        let card1 = decks[1].remove(0);
+
+        let winner;
+
+        if decks[0].len() >= card0 && decks[1].len() >= card1 {
+            let mut sub_decks = vec![];
+
+            sub_decks.push(decks[0][0..card0].to_vec());
+            sub_decks.push(decks[1][0..card1].to_vec());
+            
+            let sub_decks = recurse(&mut sub_decks);
+
+            if sub_decks[0].len() > 0 {
+                winner = 0;
+            } else {
+                winner = 1;
+            }
+        } else {
+            if card0 > card1 {
+                winner = 0;
+            } else {
+                winner = 1;
+            }
+        }
+
+        if winner == 0 {
+            decks[0].push(card0);
+            decks[0].push(card1);
+        } else {
+            decks[1].push(card1);
+            decks[1].push(card0);
+        }
+    }
+
+    decks.clone()
+}
+
+fn get_score(deck: &Vec<usize>) -> usize {
     let mut sum = 0;
     let mut mult = 1;
 
-    for card in winning_deck.iter().rev() {
-        sum += *card*mult;
+    for card in deck.iter().rev() {
+        sum += card*mult;
         mult += 1;
     }
 
-    println!("{}", sum);
+    sum
 }
