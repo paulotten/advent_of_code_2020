@@ -9,39 +9,42 @@ struct Point {
 }
 
 impl Point {
-    fn parse(s: &str) -> Point {
+    fn parse(str: &str) -> Point {
         let mut x = 0;
         let mut y = 0;
 
-        let mut diag = false;
+        let mut n = false;
+        let mut s = false;
 
-        for c in s.chars() {
+        for c in str.chars() {
             match c {
                 'n' => {
                     y += 1;
-                    diag = true;
+
+                    n = true;
+                    s = false;
                 },
                 's' => {
                     y -= 1;
-                    diag = true;
+
+                    n = false;
+                    s = true;
                 },
                 'w' => {
-                    if diag {
+                    if !s {
                         x -= 1;
-                    } else {
-                        x -= 2;
                     }
 
-                    diag = false;
+                    n = false;
+                    s = false;
                 },
                 'e' => {
-                    if diag {
+                    if !n {
                         x += 1;
-                    } else {
-                        x += 2;
                     }
 
-                    diag = false;
+                    n = false;
+                    s = false;
                 },
                 _ => panic!("Unsupported direction: {}", c),
             };
@@ -53,14 +56,14 @@ impl Point {
 
 fn main() {
     let data = data::get_data();
-    //let data = data::_sample();
+    let data = data::_sample();
 
     let points: Vec<_> = data.lines().map(Point::parse).collect();
 
     puzzle1(&points);
 }
 
-fn puzzle1(points: &Vec<Point>) {
+fn setup(points: &Vec<Point>) -> HashSet<Point> {
     let mut set: HashSet<Point> = HashSet::new();
 
     for p in points {
@@ -71,5 +74,9 @@ fn puzzle1(points: &Vec<Point>) {
         }
     }
 
-    println!("{}", set.iter().count());
+    set
+}
+
+fn puzzle1(points: &Vec<Point>) {
+    println!("{}", setup(points).iter().count());
 }
