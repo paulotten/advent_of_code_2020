@@ -15,16 +15,12 @@ fn part1(pub_a: u64, pub_b: u64) {
     let mut loop_size = 0;
 
     loop {
-        match value {
-            v if v == pub_a => {
-                pub_x = pub_b;
-                break;
-            },
-            v if v == pub_b => {
-                pub_x = pub_a;
-                break;
-            },
-            _ => {},
+        if value == pub_a {
+            pub_x = pub_b;
+            break;
+        } else if value == pub_b {
+            pub_x = pub_a;
+            break;
         }
 
         loop_size += 1;
